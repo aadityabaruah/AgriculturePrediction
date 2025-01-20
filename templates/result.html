@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gradient-to-br from-blue-50 via-white to-blue-100 min-h-screen">
+    <div class="container mx-auto px-6 py-10 max-w-5xl">
+        <!-- Header -->
+        <h1 class="text-3xl font-extrabold text-center text-gray-800 mb-8">Prediction Result</h1>
+        <p class="text-center text-lg text-gray-600 mb-6">
+            Predicted data for GPS: <span class="text-blue-600 font-semibold">{{ gps_coordinates }}</span> with radius: <span class="text-blue-600 font-semibold">{{ radius }}m</span>
+        </p>
+
+        <!-- Map Section -->
+        <div id="map" class="rounded-lg shadow-lg mb-8" style="height: 400px;"></div>
+
+        <!-- Environmental Stats -->
+        <div class="bg-blue-50 border border-blue-300 rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Environmental Stats</h2>
+            <ul class="list-disc pl-6 space-y-2 text-gray-700">
+                <li><strong>Crop Health:</strong> <span class="text-green-600">{{ crop_health }}</span></li>
+                <li><strong>Humidity:</strong> {{ humidity }}%</li>
+                <li><strong>Soil Moisture:</strong> {{ soil_moisture }}%</li>
+                <li><strong>Wind Speed:</strong> {{ wind_speed }} km/h</li>
+                <li><strong>Fertilizer Usage:</strong> {{ fertilizer_usage }}</li>
+                <li><strong>Temperature:</strong> Max: {{ current_weather.max_temp|floatformat:1 }}°C</li>
+            </ul>
+        </div>
+
+        <!-- Satellite Image -->
+        <div class="bg-white border border-gray-300 rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">Satellite Image</h2>
+            <img src="{{ satellite_image_url }}" alt="Satellite View" class="rounded-lg shadow-lg w-full">
+        </div>
+
+        <!-- Proceed to Prediction Button -->
+        <form action="/loading-to-prediction/" method="get" class="text-center">
+            <input type="hidden" name="gps_coordinates" value="{{ gps_coordinates }}">
+            <input type="hidden" name="humidity" value="{{ humidity }}">
+            <input type="hidden" name="temperature" value="{{ current_weather.max_temp|floatformat:1 }}">
+            <input type="hidden" name="soil_moisture" value="{{ soil_moisture }}">
+            <input type="hidden" name="crop_health" value="{{ crop_health }}">
+            <button type="submit" class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300">
+                Proceed to Prediction
+            </button>
+        </form>
+
+        <!-- Back Button -->
+        <a href="/" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300 mt-4 inline-block">
+            Go Back to Home
+        </a>
+    </div>
+
+    <!-- Leaflet Map Script -->
+    <script>
+        const coordinates = "{{ gps_coordinates }}".split(",").map(Number);
+        const radius = "{{ radius }}";
+
+        const map = L.map('map').setView(coordinates, 13);
+
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            attribution: 'Tiles © Esri',
+            maxZoom: 19,
+        }).addTo(map);
+
+        L.marker(coordinates).addTo(map)
+            .bindPopup(`Coordinates: ${coordinates}<br>Radius: ${radius}m`)
+            .openPopup();
+
+        L.circle(coordinates, {
+            color: 'red',
+            fillColor: '#f03',
+            fillOpacity: 0.5,
+            radius: radius
+        }).addTo(map);
+    </script>
+</body>
+</html>

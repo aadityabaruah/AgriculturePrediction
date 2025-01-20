@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Loading</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Spinner animation */
+        .spinner {
+            border: 6px solid #f3f3f3; /* Light gray */
+            border-top: 6px solid #3498db; /* Blue */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Fade-in animation */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-gray-100 via-gray-200 to-gray-300 min-h-screen flex flex-col items-center justify-center">
+    <div class="spinner"></div>
+    <h2 id="loading-message" class="text-xl font-medium text-gray-700 mt-6 fade-in">Fetching Weather Results...</h2>
+
+    <script>
+        // Change message after 1 second
+        setTimeout(() => {
+            document.getElementById("loading-message").textContent = "Running CNN on Satellite Image...";
+        }, 3000);
+
+        // Redirect after 3 seconds
+        setTimeout(() => {
+            window.location.href = "/result?gps_coordinates={{ gps_coordinates }}&radius={{ radius }}";
+        }, 3000);
+    </script>
+</body>
+</html>

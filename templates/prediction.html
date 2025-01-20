@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Fade-in animation for the page */
+        @keyframes fadeIn {
+            0% {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 1.2s ease-out;
+        }
+
+        /* Glow effect for prediction text */
+        .glow {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                text-shadow: 0 0 10px rgba(34, 150, 243, 0.8), 0 0 20px rgba(34, 150, 243, 0.6);
+            }
+            50% {
+                text-shadow: 0 0 15px rgba(34, 150, 243, 1), 0 0 30px rgba(34, 150, 243, 0.8);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-blue-100 via-white to-blue-200 min-h-screen flex items-center justify-center">
+    <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-lg fade-in">
+        <h1 class="text-3xl font-extrabold text-gray-800 mb-6">Prediction Outcome</h1>
+        <div class="bg-gradient-to-r from-blue-100 to-blue-300 border border-blue-400 rounded-lg p-6 mb-6">
+            <p class="text-xl font-semibold text-gray-800">Prediction: 
+                <span class="text-blue-600 font-bold glow">{{ prediction }}</span>
+            </p>
+            <p class="text-lg text-gray-700 mt-2">Confidence: 
+                <span class="text-blue-500 font-medium">{{ confidence }}%</span>
+            </p>
+        </div>
+        <a href="/" class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-5 py-3 rounded-lg shadow-lg hover:shadow-2xl transform hover:scale-105 transition duration-300">
+            Go Back to Home
+        </a>
+    </div>
+</body>
+</html>
