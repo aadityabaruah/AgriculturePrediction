@@ -4,6 +4,7 @@ import random
 import numpy as np
 from PIL import Image
 from io import BytesIO
+from django.conf import settings
 import requests
 from django.shortcuts import render, redirect
 from sentinelhub import (
@@ -169,19 +170,18 @@ def result(request):
         return redirect("/")  # Redirect to home page if parameters are invalid
 
     # Paths for images
-    ndvi_save_path = "agriculture/static/images/ndvi_output.png"
-    cropped_image_path = "agriculture/static/images/satellite_cropped.png"
+    ndvi_save_path = os.path.join(settings.MEDIA_ROOT, "ndvi_output.png")
+    cropped_image_path = os.path.join(settings.MEDIA_ROOT, "satellite_cropped.png")
 
     # Process NDVI and satellite cropped images
     process_ndvi(latitude, longitude, radius, ndvi_save_path)
     process_satellite_image(latitude, longitude, radius, cropped_image_path)
+
     # Fetch weather data
     weather_data = fetch_weather_data(latitude, longitude)
+
     # Calculate vegetation percentages
     vegetation_quality_percentage = calculate_overall_vegetation_quality(ndvi_save_path, black_penalty=-0.2)
-
-
-
 
     # Generate random environmental stats
     crop_health = "Good" if vegetation_quality_percentage >= 50 else "Average"
@@ -190,13 +190,12 @@ def result(request):
     wind_speed = round(random.uniform(5, 20), 1)  # Simulated
     fertilizer_usage = random.choice(["Low", "Moderate", "High"])  # Simulated
 
-
     # Pass data to the template
     return render(request, "result.html", {
         "gps_coordinates": gps_coordinates,
         "radius": radius,
-        "ndvi_image_path": f"/{ndvi_save_path}",
-        "satellite_image_path": f"/{cropped_image_path}",
+        "ndvi_image_path": settings.MEDIA_URL + "ndvi_output.png",
+        "satellite_image_path": settings.MEDIA_URL + "satellite_cropped.png",
         "vegetation_quality_percentage": vegetation_quality_percentage,
         "crop_health": crop_health,
         "humidity": humidity,
