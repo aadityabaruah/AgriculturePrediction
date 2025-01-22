@@ -24,7 +24,6 @@ config.sh_token_url = "https://identity.dataspace.copernicus.eu/auth/realms/CDSE
 config.sh_base_url = "https://sh.dataspace.copernicus.eu"
 config.save("cdse")
 
-
 # Helper function to calculate bounding box
 def calculate_bbox(latitude, longitude, radius):
     radius_in_degrees = radius / 110_567  # Convert meters to degrees
@@ -36,8 +35,6 @@ def calculate_bbox(latitude, longitude, radius):
         longitude + lon_offset,
         latitude + radius_in_degrees,
     ]
-
-
 # Function to process NDVI
 def process_ndvi(latitude, longitude, radius, save_path="agriculture/static/images/ndvi_output.png"):
     aoi_coords_wgs84 = calculate_bbox(latitude, longitude, radius)
@@ -96,8 +93,6 @@ def process_ndvi(latitude, longitude, radius, save_path="agriculture/static/imag
     ndvi_image = Image.fromarray(image)
     ndvi_image.save(save_path)
     return save_path
-
-
 # Function to fetch weather data
 def fetch_weather_data(latitude, longitude):
     weather_api_url = f"https://api.open-meteo.com/v1/forecast?latitude={latitude}&longitude={longitude}&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&timezone=auto"
@@ -116,8 +111,6 @@ def fetch_weather_data(latitude, longitude):
     except Exception as e:
         print(f"Error fetching weather data: {e}")
     return current_weather
-
-
 # Function to crop satellite image
 def process_satellite_image(latitude, longitude, radius, save_path):
     """
@@ -132,10 +125,7 @@ def process_satellite_image(latitude, longitude, radius, save_path):
             f.write(response.content)
     else:
         print(f"Error fetching satellite image: {response.status_code}")
-
-
 # Function to calculate vegetation percentage
-# Correcting the NDVI classification logic and recalculating vegetation percentages
 def calculate_overall_vegetation_quality(ndvi_image_path, black_penalty=0.0):
     ndvi_image = Image.open(ndvi_image_path)
     ndvi_array = np.array(ndvi_image)
@@ -163,8 +153,6 @@ def calculate_overall_vegetation_quality(ndvi_image_path, black_penalty=0.0):
 
     # Return rounded quality percentage
     return round(quality_percentage, 2)
-
-
 def result(request):
     gps_coordinates = request.GET.get("gps_coordinates")
     radius = request.GET.get("radius")
@@ -217,8 +205,6 @@ def result(request):
         "fertilizer_usage": fertilizer_usage,
         "current_weather": weather_data,
     })
-
-
 # Home Page View
 def home(request):
     return render(request, "home.html")
@@ -253,7 +239,6 @@ def results_to_loading(request):
         "soil_moisture": soil_moisture,
         "crop_health": crop_health,
     })
-
 def prediction_model(request):
     # Fetch parameters from the request
     humidity = int(request.GET.get("humidity", 0))

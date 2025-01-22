@@ -65,21 +65,25 @@
 
 
         <!-- Proceed to Prediction Button -->
-        <form action="/loading-to-prediction/" method="get" class="text-center">
-            <input type="hidden" name="gps_coordinates" value="{{ gps_coordinates }}">
-            <input type="hidden" name="humidity" value="{{ humidity }}">
-            <input type="hidden" name="temperature" value="{{ current_weather.max_temp|floatformat:1 }}">
-            <input type="hidden" name="soil_moisture" value="{{ soil_moisture }}">
-            <input type="hidden" name="crop_health" value="{{ crop_health }}">
-            <button type="submit" class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300">
-                Proceed to Prediction
-            </button>
-        </form>
+        <div class="flex justify-center space-x-4 mt-6">
+            <!-- Back to Home Button -->
+            <a href="/" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300">
+                Go Back to Home
+            </a>
 
-        <!-- Back Button -->
-        <a href="/" class="bg-gradient-to-r from-green-500 to-blue-500 text-white px-6 py-3 rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300 mt-4 inline-block">
-            Go Back to Home
-        </a>
+            <!-- Proceed to Prediction Button -->
+            <form action="/loading-to-prediction/" method="get">
+                <input type="hidden" name="gps_coordinates" value="{{ gps_coordinates }}">
+                <input type="hidden" name="humidity" value="{{ humidity }}">
+                <input type="hidden" name="temperature" value="{{ current_weather.max_temp|floatformat:1 }}">
+                <input type="hidden" name="soil_moisture" value="{{ soil_moisture }}">
+                <input type="hidden" name="crop_health" value="{{ crop_health }}">
+                <button type="submit" class="bg-gradient-to-r from-blue-500 to-green-500 text-white px-6 py-3 rounded-lg shadow-md hover:scale-105 hover:shadow-lg transition-transform duration-300">
+                    Proceed to Prediction
+                </button>
+            </form>
+        </div>
+
     </div>
 
     <!-- Leaflet Map Script -->
